@@ -1,0 +1,48 @@
+CREATE TABLE [dbo].[Categories] (
+    [IdCategory] INT            IDENTITY (1, 1) NOT NULL,
+    [Name]       NVARCHAR (100) NOT NULL,
+    PRIMARY KEY CLUSTERED ([IdCategory] ASC)
+);
+
+CREATE TABLE [dbo].[Roles] (
+    [IdRole] INT           IDENTITY (1, 1) NOT NULL,
+    [Name]   NVARCHAR (50) NOT NULL,
+    PRIMARY KEY CLUSTERED ([IdRole] ASC)
+);
+
+CREATE TABLE [dbo].[Users] (
+    [IdUser]       INT            IDENTITY (1, 1) NOT NULL,
+    [FrstName]     NVARCHAR (50)  NOT NULL,
+    [LastName]     NVARCHAR (50)  NOT NULL,
+    [Email]        NVARCHAR (100) NOT NULL,
+    [PasswordHash] NVARCHAR (256) NOT NULL,
+    [Status]       BIT            NOT NULL,
+    [CreatedDate]  DATETIME       DEFAULT (getdate()) NULL,
+    [IdRole]       INT            NOT NULL,
+    PRIMARY KEY CLUSTERED ([IdUser] ASC),
+    UNIQUE NONCLUSTERED ([Email] ASC),
+    FOREIGN KEY ([IdRole]) REFERENCES [dbo].[Roles] ([IdRole])
+);
+
+CREATE TABLE [dbo].[Products] (
+    [IdProduct]    INT             IDENTITY (1, 1) NOT NULL,
+    [Name]         NVARCHAR (100)  NOT NULL,
+    [Description]  NVARCHAR (255)  NULL,
+    [Price]        DECIMAL (18, 2) NOT NULL,
+    [CountProduct] INT             NOT NULL,
+    [IdCategory]   INT             NOT NULL,
+    PRIMARY KEY CLUSTERED ([IdProduct] ASC),
+    FOREIGN KEY ([IdCategory]) REFERENCES [dbo].[Categories] ([IdCategory])
+);
+
+CREATE TABLE [dbo].[Orders] (
+    [IdOrder]    INT             IDENTITY (1, 1) NOT NULL,
+    [TotalPrice] DECIMAL (18, 2) NOT NULL,
+    [OrderDate]  DATETIME        DEFAULT (getdate()) NULL,
+    [IdUser]     INT             NULL,
+    [IdProduct]  INT             NULL,
+    PRIMARY KEY CLUSTERED ([IdOrder] ASC),
+    FOREIGN KEY ([IdUser]) REFERENCES [dbo].[Users] ([IdUser]),
+    FOREIGN KEY ([IdProduct]) REFERENCES [dbo].[Products] ([IdProduct])
+);
+
