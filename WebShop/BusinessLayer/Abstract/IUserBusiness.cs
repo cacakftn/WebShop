@@ -1,4 +1,5 @@
 ﻿using Core.Result;
+using Entities;
 using Entities.DTO;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,12 @@ namespace BusinessLayer.Abstract
     public interface IUserBusiness
     {
         ResultWrapper Login(LoginDTO loginDTO);
+        ResultWrapper Add(User user);
+        ResultWrapper Update(User user);
+        ResultWrapper Delete(User user);
+        List<User> GetUsers();
+
+        User GetById(int id);
        
     }
 }

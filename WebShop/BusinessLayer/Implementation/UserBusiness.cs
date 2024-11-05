@@ -15,11 +15,78 @@ namespace BusinessLayer.Implementation
     public class UserBusiness : IUserBusiness
     {
         private readonly IUserRepository userRepository;
+        private readonly IOrderRepository orderRepository;
 
-        public UserBusiness(IUserRepository userRepository)
+        public UserBusiness(IUserRepository userRepository, IOrderRepository orderRepository)
         {
             this.userRepository = userRepository;
+            this.orderRepository = orderRepository;
         }
+
+        public ResultWrapper Add(User user)
+        {
+            if (userRepository.Add(user) == true)
+            {
+                return new ResultWrapper
+                {
+                    Message = "Uspenso dodat",
+                    Success = true
+                };
+            }
+            else
+            {
+                return new ResultWrapper
+                {
+                    Message = "Greska",
+                    Success = false
+                };
+            }
+        }
+
+        public ResultWrapper Delete(User user)
+        {
+            if(orderRepository.GetOrderByUserId(user.IdUser)  > 0)
+            {
+                return new ResultWrapper
+                {
+                    Message = "Korisnicki nalog je povezan sa tabelom order",
+                    Success = false
+                };
+            }
+            else
+            {
+                if(userRepository.Delete(user) == true)
+                {
+                    return new ResultWrapper
+                    {
+                        Message = "Uspesno obrisan nalog",
+                        Success = true
+                    };
+                }
+                else
+                {
+                    return new ResultWrapper
+                    {
+                        Message = "Greska",
+                        Success = false
+                    };
+                }
+
+            }
+        }
+
+        public User GetById(int id)
+        {
+           var x = userRepository.GetAll().Find(item => item.IdUser == id);
+            if (x == null) return new User();
+            return x;
+        }
+
+        public List<User> GetUsers()
+        {
+           return userRepository.GetAll();
+        }
+
         public ResultWrapper Login(LoginDTO loginDTO)
         {
             User user = userRepository.GetByEmail(loginDTO.Email!);
@@ -50,6 +117,20 @@ namespace BusinessLayer.Implementation
                     };
                 }
             }
+        }
+
+        public ResultWrapper Update(User user)
+        {
+            return userRepository.Update(user) == true ?
+                new ResultWrapper
+                {
+                    Message = "Uspeh",
+                    Success = true
+                } : new ResultWrapper
+                {
+                    Message = "Greska",
+                    Success = false
+                };
         }
     }
 }

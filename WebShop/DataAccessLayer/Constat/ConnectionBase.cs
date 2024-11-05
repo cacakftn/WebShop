@@ -8,6 +8,6 @@ namespace DataAccessLayer.Constat
 {
     internal class ConnectionBase
     {
-        public static string ConnectionString = "Data Source=(localdb)\\ProjectModels;Initial Catalog=WebShop3;";
+        public static string ConnectionString = "Data Source=(localdb)\\ProjectModels;Initial Catalog=WebShop;";
     }
 }

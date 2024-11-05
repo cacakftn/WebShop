@@ -10,5 +10,6 @@ namespace DataAccessLayer
 {
     public interface IOrderRepository :IRepository<Order>
     {
+        int GetOrderByUserId(int userId);
     }
 }

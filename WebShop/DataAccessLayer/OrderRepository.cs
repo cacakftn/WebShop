@@ -81,6 +81,25 @@ namespace DataAccessLayer
             return list;
         }
 
+        public int GetOrderByUserId(int userId)
+        {
+            using (SqlConnection sqlConnection = new SqlConnection())
+            {
+                sqlConnection.ConnectionString = ConnectionBase.ConnectionString;
+                sqlConnection.Open();
+
+                SqlCommand sqlCommand = sqlConnection.CreateCommand();
+                sqlCommand.CommandText = "SELECT Count(*) FROM Orders WHERE UserId=@UserId";
+                sqlCommand.Parameters.AddWithValue("@UserId", userId);
+
+
+                int res = (int) sqlCommand.ExecuteScalar();
+
+                return res;
+               
+            }
+        }
+
         public bool Update(Order item)
         {
             using (SqlConnection sqlConnection = new SqlConnection())
