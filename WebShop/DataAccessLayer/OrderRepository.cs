@@ -33,17 +33,73 @@ namespace DataAccessLayer
 
         public bool Delete(Order item)
         {
-            throw new NotImplementedException();
+            using (SqlConnection sqlConnection = new SqlConnection())
+            {
+                sqlConnection.ConnectionString = ConnectionBase.ConnectionString;
+                sqlConnection.Open();
+
+                SqlCommand sqlCommand = sqlConnection.CreateCommand();
+                sqlCommand.CommandText = "DELETE FROM Orders WHERE IdOrder=@IdOrder";
+                sqlCommand.Parameters.AddWithValue("@IdOrder", item.IdOrder);
+
+
+                int res = sqlCommand.ExecuteNonQuery();
+
+                return res > 0;
+            }
         }
 
         public List<Order> GetAll()
         {
-            throw new NotImplementedException();
+            List<Order> list = new List<Order>();
+
+            using (SqlConnection sqlConnection = new SqlConnection())
+            {
+                sqlConnection.ConnectionString = ConnectionBase.ConnectionString;
+                sqlConnection.Open();
+
+                SqlCommand sqlCommand = sqlConnection.CreateCommand();
+                sqlCommand.CommandText = "SELECT * FROM Orders";
+
+                SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
+
+                while (sqlDataReader.Read())
+                {
+                    Order order = new Order();
+
+                    order.IdOrder = sqlDataReader.GetInt32(0);
+                    order.TotalPrice = sqlDataReader.GetDecimal(1);
+                    order.OrderDate = sqlDataReader.GetDateTime(2);
+                    order.IdUser = sqlDataReader.GetInt32(3);
+                    order.IdProduct = sqlDataReader.GetInt32(4);
+                    list.Add(order);
+
+
+                }
+
+            }
+            return list;
         }
 
         public bool Update(Order item)
         {
-            throw new NotImplementedException();
+            using (SqlConnection sqlConnection = new SqlConnection())
+            {
+                sqlConnection.ConnectionString = ConnectionBase.ConnectionString;
+                sqlConnection.Open();
+
+                SqlCommand sqlCommand = sqlConnection.CreateCommand();
+                sqlCommand.CommandText = "UPDATE Orders SET TotalPrice=@TotalPrice,IdUser=@IdUser," +
+                    "IdProduct=@IdProduct  WHERE IdOrder=@IdOrder";
+                sqlCommand.Parameters.AddWithValue("@TotalPrice", item.TotalPrice);
+                sqlCommand.Parameters.AddWithValue("@IdUser", item.IdUser);
+                sqlCommand.Parameters.AddWithValue("@IdProduct", item.IdProduct);
+                sqlCommand.Parameters.AddWithValue("@IdOrder", item.IdOrder);
+
+                int res = sqlCommand.ExecuteNonQuery();
+
+                return res > 0;
+            }
         }
     }
 }
