@@ -35,6 +35,7 @@ namespace BusinessLayer.Implementation
                 {
                     if (product!.CountProduct > 0)
                     {
+                        order1 = new Order();
                         order1!.TotalPrice = product!.Price;
                         orderRepository.Add(order1);
                         product.CountProduct = product.CountProduct - 1;
