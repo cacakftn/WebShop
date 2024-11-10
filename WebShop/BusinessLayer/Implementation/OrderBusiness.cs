@@ -27,7 +27,7 @@ namespace BusinessLayer.Implementation
         {
             User user = userBusiness.GetById(order.IdUser);
             Product? product = productRepository.GetAll().Find(x=>x.IdProduct == order.IdProduct);
-            Order? order1 = orderRepository.GetAll().Find(x=>x.IdOrder==order.IdOrder);
+            Order? order1 = orderRepository.GetAll().Find(x=>x.IdOrder==order.IdOrder && x.IdUser==order.IdUser);
 
             if (user.Satus == true)
             {
