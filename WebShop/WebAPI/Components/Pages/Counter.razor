@@ -1,0 +1,67 @@
+﻿@page "/counter"
+@rendermode InteractiveServer
+@using Entities;
+@using BusinessLayer.Abstract;
+
+@inject  IUserBusiness userBusiness
+
+
+<PageTitle>Counter</PageTitle>
+
+<h1>Users</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">First</th>
+            <th scope="col">Last</th>
+            <th scope="col">Email</th>
+            <th scope="col">Password</th>
+            <th scope="col">Status</th>
+            <th scope="col">Created date</th>
+            <th scope="col">Role</th>
+        </tr>
+    </thead>
+    <tbody>
+       
+        @foreach(User user in ListaUsera!)
+        {
+            <tr>
+                <th scope="row">1</th>
+                <td>@user.FrstName</td>
+                <td>@user.LastName</td>
+                <td>@user.Email</td>
+                <td>@user.PasswordHash</td>
+                <td>
+                    
+                    @if (user.Satus == true)
+                    {
+                        <button type="button" class="btn btn-success">Aktivan</button>
+                    }
+                    else
+                    {
+                        
+                        <button type="button" class="btn btn-danger">Blokiran</button>
+                    }
+
+                </td>
+                <td>@user.CreatedDate</td>
+                <td>@user.IdRole</td>
+            </tr>
+        }
+
+    </tbody>
+</table>
+
+
+
+
+@code {
+
+    private List<User>?ListaUsera{ get; set; }
+
+    protected override void OnInitialized()
+    {
+        ListaUsera = userBusiness.GetUsers();
+    }
+}
