@@ -89,7 +89,7 @@ namespace DataAccessLayer
                 sqlConnection.Open();
 
                 SqlCommand sqlCommand = sqlConnection.CreateCommand();
-                sqlCommand.CommandText = "SELECT Count(*) FROM Orders WHERE UserId=@UserId";
+                sqlCommand.CommandText = "SELECT Count(*) FROM Orders WHERE IdUser=@UserId";
                 sqlCommand.Parameters.AddWithValue("@UserId", userId);
 
 

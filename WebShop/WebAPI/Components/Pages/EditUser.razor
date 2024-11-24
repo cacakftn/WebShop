@@ -1,0 +1,70 @@
+﻿@page "/editUser/{UserId:int}"
+@using Entities;
+@using BusinessLayer.Abstract;
+@rendermode InteractiveServer
+@inject IUserBusiness userBusiness
+@inject NavigationManager navigate
+
+<h3>EditUser</h3>
+
+@if (user != null)
+{
+    
+    <form >
+
+        <div class="mb-3">
+            <label for="exampleInputName" class="form-label">Name</label>
+            <input type="text" @bind="user.FrstName" class="form-control" id="exampleInputName">
+        </div>
+        <div class="mb-3">
+            <label for="exampleInputLast" class="form-label">Last name</label>
+            <input type="text" @bind="user.LastName"  class="form-control" id="exampleInputLast">
+        </div>
+
+        <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Email address</label>
+            <input type="email" class="form-control" @bind="user.Email" id="exampleInputEmail1" aria-describedby="emailHelp">
+        </div>
+      
+
+        <div class="mb-3 form-check">
+            <input type="checkbox" class="form-check-input" @bind="user.Satus" id="exampleCheck1">
+            <label class="form-check-label"  for="exampleCheck1">Status</label>
+        </div>
+
+
+        <button type="button"  class="btn btn-primary" @onclick="Update" >Submit</button>
+        <button type="button"  class="btn btn-primary" @onclick="Otkazi">Cancel</button>
+    </form>
+}
+
+
+
+@code {
+
+    [Parameter]
+    public int UserId { get; set; }
+
+    private User? user;
+
+    protected override void OnInitialized()
+    {
+        user = this.userBusiness.GetById(UserId);
+
+    }
+
+    private void Update()
+    {
+          if(user!=null)
+          {
+            this.userBusiness.Update(user);
+        }
+        navigate.NavigateTo("/users");
+
+    }
+    private void Otkazi()
+    {
+        navigate.NavigateTo("/users");
+    }
+
+}

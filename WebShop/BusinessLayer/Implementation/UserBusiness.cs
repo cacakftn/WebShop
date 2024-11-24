@@ -25,6 +25,8 @@ namespace BusinessLayer.Implementation
 
         public ResultWrapper Add(User user)
         {
+              
+            user.PasswordHash = HashingHelper.CreateHash(user.PasswordHash!);
             if (userRepository.Add(user) == true)
             {
                 return new ResultWrapper
@@ -74,7 +76,6 @@ namespace BusinessLayer.Implementation
 
             }
         }
-
         public User GetById(int id)
         {
            var x = userRepository.GetAll().Find(item => item.IdUser == id);

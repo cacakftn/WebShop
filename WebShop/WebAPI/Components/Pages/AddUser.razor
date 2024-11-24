@@ -1,0 +1,76 @@
+﻿@page "/AddUser"
+@using BusinessLayer.Abstract;
+@using Entities;
+@inject IJSRuntime JS
+@inject IUserBusiness userBusiness;
+@inject NavigationManager nv
+@rendermode InteractiveServer
+<h3>AddUser</h3>
+
+@if (user != null)
+{
+    
+
+    <form>
+        <div class="mb-3">
+            <label for="exampleInputFirstName" class="form-label">First name</label>
+            <input type="text" @bind="user.FrstName" class="form-control" id="exampleInputFirstName">
+
+        </div>
+        <div class="mb-3">
+            <label for="exampleInputLastName" class="form-label">Last name</label>
+            <input type="text" @bind="user.LastName" class="form-control" id="exampleInputLastName">
+
+        </div>
+        <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Email address</label>
+            <input type="email" @bind="user.Email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+
+        </div>
+        <div class="mb-3">
+            <label for="exampleInputPassword1" class="form-label">Password</label>
+            <input type="password" @bind="user.PasswordHash" class="form-control" id="exampleInputPassword1">
+        </div>
+        <div class="mb-3 form-check">
+            <input type="checkbox" @bind="user.Satus" class="form-check-input" id="exampleCheck1">
+            <label class="form-check-label" for="exampleCheck1">Status</label>
+        </div>
+
+        <div class="form-floating">
+            <label for="roleSelect" class="form-label">Role</label>
+            <select class="form-select" id="idRole" @bind="user.IdRole" aria-label="roleSelect">
+
+
+                <option value="1">Admin</option>
+                <option value="2">Radnik</option>
+            </select>
+
+        </div>
+
+
+        <button type="button" @onclick="Save" class="btn btn-primary">Submit</button>
+    </form>
+}
+
+@code {
+    private User? user;
+
+    protected override void OnInitialized()
+    {
+        user = new User();
+    }
+
+
+
+    private void Save()
+    {
+
+        if (user != null)
+        {
+            var result = this.userBusiness.Add(user);
+            JS.InvokeVoidAsync("alert", result.Message);
+            nv.NavigateTo("/users");
+        }
+
+    }
+}
