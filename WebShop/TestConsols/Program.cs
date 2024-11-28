@@ -10,20 +10,13 @@ namespace TestConsols
         static void Main(string[] args)
         {
 
-            User user = new User
+           IOrderRepository orderRepository = new OrderRepository();
+
+            var lista = orderRepository.GetUserOrderDTOs();
+            foreach (var item in lista)
             {
-                FrstName = "Test",
-                LastName = "Test",
-                Satus  = true,
-                Email= "Test@test.com",
-                PasswordHash="dfjskfhsd",
-                IdRole=1
-            };
-
-            IUserRepository userRepository = new UserRepository();
-            bool add = userRepository.Add(user);
-
-            Console.WriteLine(add);
+                Console.WriteLine(item.FrstName+" "+item.Price);
+            }
 
         }
     }

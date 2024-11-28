@@ -2,6 +2,7 @@
 using Core.Result;
 using DataAccessLayer;
 using Entities;
+using Entities.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -98,6 +99,11 @@ namespace BusinessLayer.Implementation
         public ResultWrapper GetOrderById(int id)
         {
             throw new NotImplementedException();
+        }
+
+        public List<UserOrderDTO> GetUserOrderDTOs()
+        {
+          return  orderRepository.GetUserOrderDTOs();
         }
 
         public ResultWrapper RemoveOrder(Order order)

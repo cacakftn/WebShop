@@ -1,5 +1,6 @@
 ﻿using DataAccessLayer.Constat;
 using Entities;
+using Entities.DTO;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -98,6 +99,45 @@ namespace DataAccessLayer
                 return res;
                
             }
+        }
+
+        public List<UserOrderDTO> GetUserOrderDTOs()
+        {
+            List<UserOrderDTO> list = new List<UserOrderDTO>();
+
+            using (SqlConnection sqlConnection = new SqlConnection())
+            {
+                sqlConnection.ConnectionString = ConnectionBase.ConnectionString;
+                sqlConnection.Open();
+
+                SqlCommand sqlCommand = sqlConnection.CreateCommand();
+                sqlCommand.CommandText = "SELECT u.IdUser, u.FrstName, u.LastName," +
+                    "p.IdProduct,\r\np.Name, p.Price,o.IdOrder, " +
+                    "o.TotalPrice, o.OrderDate\r\nFROM Users u " +
+                    "JOIN Orders o ON u.IdUser=o.IdUser\r\nJOIN " +
+                    "Products p ON o.IdProduct = p.IdProduct";
+
+                SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
+
+                while (sqlDataReader.Read())
+                {
+                    UserOrderDTO userOrderDTO = new UserOrderDTO();
+                    userOrderDTO.IdUser = sqlDataReader.GetInt32(0);
+                    userOrderDTO.FrstName = sqlDataReader.GetString(1);
+                    userOrderDTO.LastName = sqlDataReader.GetString(2);
+                    userOrderDTO.IdProduct = sqlDataReader.GetInt32(3);
+                    userOrderDTO.NameProduct = sqlDataReader.GetString(4);
+                    userOrderDTO.Price = sqlDataReader.GetDecimal(5);
+                    userOrderDTO.IdOrder = sqlDataReader.GetInt32(6);
+                    userOrderDTO.TotalPrice = sqlDataReader.GetDecimal(7);
+                    userOrderDTO.OrderDate = sqlDataReader.GetDateTime(8);
+                    list.Add(userOrderDTO);
+
+
+                }
+
+            }
+            return list;
         }
 
         public bool Update(Order item)

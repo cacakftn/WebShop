@@ -6,6 +6,7 @@ using Entities;
 using Entities.DTO;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,7 +26,18 @@ namespace BusinessLayer.Implementation
 
         public ResultWrapper Add(User user)
         {
-              
+            var validationResults = new List<ValidationResult>();
+            var validationContext = new ValidationContext(user, null, null);
+
+            if (!Validator.TryValidateObject(user, validationContext, validationResults, true))
+            {
+                return new ResultWrapper
+                {
+                    Message = string.Join(", ", validationResults.Select(vr => vr.ErrorMessage)),
+                    Success = false
+                };
+            }
+
             user.PasswordHash = HashingHelper.CreateHash(user.PasswordHash!);
             if (userRepository.Add(user) == true)
             {
